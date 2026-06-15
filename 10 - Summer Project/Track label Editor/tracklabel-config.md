@@ -54,13 +54,13 @@ Sources examined:
 
 ## `<tracklabel-configuration>` Attributes
 
-| Attribute | Type | Required | Default | Notes |
-|---|---|---|---|---|
-| `path` | string | yes | — | **Deprecated** — required by schema but unused at runtime |
-| `radio-callsign-filepath` | string | no | — | Path to radio callsign database file |
-| `has-external-transfer` | boolean | no | `true` | Affects how inbound-aircraft transfer actions are shown |
-| `has-force-act` | boolean | no | `true` | Affects OLDI ForceAct actions for inbound/assumed flights |
-| `has-flight-rule-change` | boolean | no | `false` | Enables VFR↔IFR rule-change from the label context menu |
+| Attribute                 | Type    | Required | Default | Notes                                                     |
+| ------------------------- | ------- | -------- | ------- | --------------------------------------------------------- |
+| `path`                    | string  | yes      | —       | **Deprecated** — required by schema but unused at runtime |
+| `radio-callsign-filepath` | string  | no       | —       | Path to radio callsign database file                      |
+| `has-external-transfer`   | boolean | no       | `true`  | Affects how inbound-aircraft transfer actions are shown   |
+| `has-force-act`           | boolean | no       | `true`  | Affects OLDI ForceAct actions for inbound/assumed flights |
+| `has-flight-rule-change`  | boolean | no       | `false` | Enables VFR↔IFR rule-change from the label context menu   |
 
 ---
 
@@ -68,12 +68,12 @@ Sources examined:
 
 Each `<tracklabel>` element has a `tracklabel-type` attribute.
 
-| Type | Description |
-|---|---|
-| `Correlated` | A track correlated with a flight plan |
-| `Uncorrelated` | A track without a flight plan |
-| `FlightPlanTrack` | A flight plan track (no radar return) |
-| `Ground` | A ground vehicle / surface movement track |
+| Type              | Description                               |
+| ----------------- | ----------------------------------------- |
+| `Correlated`      | A track correlated with a flight plan     |
+| `Uncorrelated`    | A track without a flight plan             |
+| `FlightPlanTrack` | A flight plan track (no radar return)     |
+| `Ground`          | A ground vehicle / surface movement track |
 
 The `<extended-tracklabel>` element uses `tracklabel-type="Extended"` (optional attribute, defaults to `Extended`).
 
@@ -222,9 +222,9 @@ Controls when a field is shown when the track is **not** selected/hovered.
 </tlabel:visibility>
 ```
 
-| Attribute / Element | Notes |
-|---|---|
-| `when-unselected-for-control-states` | Space-separated list of `ControlType` values. Field is shown when unselected only if the track is in one of these states. If omitted, field shows for all control states (default: all 11 states). |
+| Attribute / Element                                    | Notes                                                                                                                                                                                                                                           |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `when-unselected-for-control-states`                   | Space-separated list of `ControlType` values. Field is shown when unselected only if the track is in one of these states. If omitted, field shows for all control states (default: all 11 states).                                              |
 | `<show-if flight-property="..." property-value="...">` | Optional additional condition. Field is shown only if the given flight property (a `FieldType` value) matches one of the space-separated `property-value` entries. If `flight-property` is omitted, the condition checks the field's own value. |
 
 Valid `ControlType` values for `when-unselected-for-control-states`:
@@ -268,12 +268,12 @@ These are indicators and quick-action buttons shown **beside** (to the left of) 
 
 Valid `type` values:
 
-| Value | Description |
-|---|---|
-| `TransferAction` | Assume / Transfer / Release button (single click) |
-| `VFRIndicator` | Shows "V" for VFR flights. Color follows `flightRule` field. |
-| `RequestInIndicator` | Shows "ROF" for the sector that requested control |
-| `RequestOutIndicator` | Shows "ROF" when another sector requested control |
+| Value                                     | Description                                                             |
+| ----------------------------------------- | ----------------------------------------------------------------------- |
+| `TransferAction`                          | Assume / Transfer / Release button (single click)                       |
+| `VFRIndicator`                            | Shows "V" for VFR flights. Color follows `flightRule` field.            |
+| `RequestInIndicator`                      | Shows "ROF" for the sector that requested control                       |
+| `RequestOutIndicator`                     | Shows "ROF" when another sector requested control                       |
 | `ManualOutboundCoordinationTimeoutAction` | Phone icon when outbound coordination has timed out for Assumed flights |
 
 ---
@@ -295,18 +295,18 @@ Valid `type` values:
 
 ### ❌ Out of scope (not supported — do not offer in editor)
 
-| Constraint | Reason |
-|---|---|
-| **No column layout** | Fields are only laid out horizontally row by row. `tracklabel-line` is the only structural dimension. There is no column grid. |
-| **Only one configuration per file** | The file always has exactly one `<instance id="polaris-asd-tracklabel">`. Multiple instances are not loaded. |
-| **`<edit>` only on `freeText`** | The C++ code throws `InitializationException` if `<edit>` is placed on any other field type at startup. |
-| **Extended label only affects Correlated and FlightPlanTrack** | The `extractExtendedTrackLabel` method only searches for those two types. `Uncorrelated` and `Ground` are not extended. |
-| **Only one `<extended-tracklabel>` block** | The schema allows 0 or 1. A second block would be ignored or cause a parse error. |
-| **`searchable` only for five context menus** | `searchable="true"` is only valid for `ASPMenu`, `CFLMenu`, `HeadingMenu`, `ARCMenu`, `XFLMenu`. Any other menu throws `InitializationException`. |
-| **Closed field-name enum** | `field-name` must be one of the ~60 values in `FieldType`. Custom/arbitrary field names are not allowed. |
-| **Closed font-adjustment set** | Only `-4`, `-2`, `-1`, `0`, `+1`, `+2`, `+4` are valid. |
-| **Closed tracklabel-type enum** | Only `Correlated`, `Uncorrelated`, `FlightPlanTrack`, `Ground` for `<tracklabel>`. |
-| **`path` attribute is irrelevant** | It is required by the schema but the runtime does not use its value. It cannot be removed (schema validation fails), but its content doesn't matter. |
-| **Context menus outside the known map produce silent no-ops** | An unknown `context-menu` value returns an empty QML source string — nothing is displayed, but no error is raised. |
-| **`show-if flight-property` must be a known FieldType** | The attribute type is `FieldType`. Arbitrary property names are not supported. |
-| **Press vs. hold ordering is automatic** | Within a field, `type="press"` context menu items always appear before `type="hold"` items, regardless of XML declaration order. The editor cannot override this ordering. |
+| Constraint                                                     | Reason                                                                                                                                                                     |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **No column layout**                                           | Fields are only laid out horizontally row by row. `tracklabel-line` is the only structural dimension. There is no column grid.                                             |
+| **Only one configuration per file**                            | The file always has exactly one `<instance id="polaris-asd-tracklabel">`. Multiple instances are not loaded.                                                               |
+| **`<edit>` only on `freeText`**                                | The C++ code throws `InitializationException` if `<edit>` is placed on any other field type at startup.                                                                    |
+| **Extended label only affects Correlated and FlightPlanTrack** | The `extractExtendedTrackLabel` method only searches for those two types. `Uncorrelated` and `Ground` are not extended.                                                    |
+| **Only one `<extended-tracklabel>` block**                     | The schema allows 0 or 1. A second block would be ignored or cause a parse error.                                                                                          |
+| **`searchable` only for five context menus**                   | `searchable="true"` is only valid for `ASPMenu`, `CFLMenu`, `HeadingMenu`, `ARCMenu`, `XFLMenu`. Any other menu throws `InitializationException`.                          |
+| **Closed field-name enum**                                     | `field-name` must be one of the ~60 values in `FieldType`. Custom/arbitrary field names are not allowed.                                                                   |
+| **Closed font-adjustment set**                                 | Only `-4`, `-2`, `-1`, `0`, `+1`, `+2`, `+4` are valid.                                                                                                                    |
+| **Closed tracklabel-type enum**                                | Only `Correlated`, `Uncorrelated`, `FlightPlanTrack`, `Ground` for `<tracklabel>`.                                                                                         |
+| **`path` attribute is irrelevant**                             | It is required by the schema but the runtime does not use its value. It cannot be removed (schema validation fails), but its content doesn't matter.                       |
+| **Context menus outside the known map produce silent no-ops**  | An unknown `context-menu` value returns an empty QML source string — nothing is displayed, but no error is raised.                                                         |
+| **`show-if flight-property` must be a known FieldType**        | The attribute type is `FieldType`. Arbitrary property names are not supported.                                                                                             |
+| **Press vs. hold ordering is automatic**                       | Within a field, `type="press"` context menu items always appear before `type="hold"` items, regardless of XML declaration order. The editor cannot override this ordering. |

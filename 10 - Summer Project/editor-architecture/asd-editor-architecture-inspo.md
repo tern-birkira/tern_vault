@@ -33,14 +33,14 @@ graph LR
     G -->|"update events\nback to"| D
 ```
 
-| # | Layer | One-line job |
-|---|-------|-------------|
-| 1 | **Configuration** | Parse XML into layout structs describing which fields appear and how |
-| 2 | **Field Model** | Store, validate, and track changes for a single piece of data |
-| 3 | **Editor Record** | Group all fields belonging to one open editor tab |
-| 4 | **Qt Models** | Expose records and layout to QML as `QAbstractListModel` rows |
-| 5 | **Command Dispatcher** | Compare edited fields to the last-known backend state and send only the changed ones |
-| 6 | **QML UI** | Render the window; bind inputs to Qt model roles |
+| #   | Layer                  | One-line job                                                                         |
+| --- | ---------------------- | ------------------------------------------------------------------------------------ |
+| 1   | **Configuration**      | Parse XML into layout structs describing which fields appear and how                 |
+| 2   | **Field Model**        | Store, validate, and track changes for a single piece of data                        |
+| 3   | **Editor Record**      | Group all fields belonging to one open editor tab                                    |
+| 4   | **Qt Models**          | Expose records and layout to QML as `QAbstractListModel` rows                        |
+| 5   | **Command Dispatcher** | Compare edited fields to the last-known backend state and send only the changed ones |
+| 6   | **QML UI**             | Render the window; bind inputs to Qt model roles                                     |
 
 ---
 
@@ -337,14 +337,14 @@ backend data object. It provides:
 
 ### 7.4 Qt Models
 
-| Model | Role |
-|-------|------|
-| **EditorModel** | Top-level `QAbstractListModel`; one row = one open tab (Editor Record). Also registers itself as a listener for backend event handler interfaces. Drives tab visibility, selection, and search. |
-| **LayoutLineModel** | List of display lines; each row references a `LayoutFieldModel`. |
-| **LayoutFieldModel** | List of field metadata (type, label, width, input context, drop-down values) for one line. Used by QML repeaters to build the form layout dynamically. |
-| **HeaderModel** | List of header button rows. |
-| **RecentlyOpenedModel** | Ordered list of recently opened record IDs. |
-| **SearchFilterProxyModel** | Proxy on `EditorModel` for the search panel. |
+| Model                      | Role                                                                                                                                                                                            |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **EditorModel**            | Top-level `QAbstractListModel`; one row = one open tab (Editor Record). Also registers itself as a listener for backend event handler interfaces. Drives tab visibility, selection, and search. |
+| **LayoutLineModel**        | List of display lines; each row references a `LayoutFieldModel`.                                                                                                                                |
+| **LayoutFieldModel**       | List of field metadata (type, label, width, input context, drop-down values) for one line. Used by QML repeaters to build the form layout dynamically.                                          |
+| **HeaderModel**            | List of header button rows.                                                                                                                                                                     |
+| **RecentlyOpenedModel**    | Ordered list of recently opened record IDs.                                                                                                                                                     |
+| **SearchFilterProxyModel** | Proxy on `EditorModel` for the search panel.                                                                                                                                                    |
 
 `EditorModel` roles (integer constants, one per field/flag) cover every editable field *and*
 dialogue-visibility flags, allowing QML to bind directly without additional controllers.
@@ -394,14 +394,14 @@ and:
 
 ## 8. Key Design Patterns
 
-| Pattern | Where used |
-|---------|------------|
-| **Interface-based dependency injection** | All external systems accessed through interfaces (`IDataStorage`, `ICommandDispatcher`). Makes unit testing straightforward with mocks. |
-| **Data-driven UI layout** | Config structs drive both `LayoutLineModel`/`LayoutFieldModel` and the QML repeaters; adding a new field requires only XML + enum changes, no C++ or QML edits. |
-| **Command pattern** | Each field edit becomes a discrete typed command — atomic, independently testable, and easy to extend. |
-| **Event handler fan-out** | `EditorModel` registers for multiple backend event handler interfaces; updates arrive as typed callbacks, not generic signals. |
-| **Composition root (Instantiator)** | Single class owns the object graph, keeping construction order explicit and preventing circular dependencies. |
-| **Role-based list models** | `QAbstractListModel` with custom integer roles lets QML bind to any field property without extra controllers or adapters. |
+| Pattern                                  | Where used                                                                                                                                                      |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Interface-based dependency injection** | All external systems accessed through interfaces (`IDataStorage`, `ICommandDispatcher`). Makes unit testing straightforward with mocks.                         |
+| **Data-driven UI layout**                | Config structs drive both `LayoutLineModel`/`LayoutFieldModel` and the QML repeaters; adding a new field requires only XML + enum changes, no C++ or QML edits. |
+| **Command pattern**                      | Each field edit becomes a discrete typed command — atomic, independently testable, and easy to extend.                                                          |
+| **Event handler fan-out**                | `EditorModel` registers for multiple backend event handler interfaces; updates arrive as typed callbacks, not generic signals.                                  |
+| **Composition root (Instantiator)**      | Single class owns the object graph, keeping construction order explicit and preventing circular dependencies.                                                   |
+| **Role-based list models**               | `QAbstractListModel` with custom integer roles lets QML bind to any field property without extra controllers or adapters.                                       |
 
 ---
 
