@@ -1,0 +1,55 @@
+./.obsidian/workspace.json:                "query": "extended",
+./.obsidian/workspace.json:    "extended.info",
+./60 - Daily Notes/2026-06-26.md:| `TrackLabelListType` | `TrackLabelConfigModel` — root container, owns `tracklabel[]`, `extended-tracklabel?`, `column-0-actions?`. Has attributes: `path`, `radio-callsign-filepath`, `has-external-transfer`, `has-force-act`, `has-flight-rule-change`. |
+./60 - Daily Notes/2026-06-26.md:- **Tag:** `tracklabel` or `extended-tracklabel` (set by subclass)
+./60 - Daily Notes/2026-06-26.md:- `m_extendedTracklabel` — `ExtendedTrackLabelModel*` (minOccurs=0, maxOccurs=1, nullable)
+./60 - Daily Notes/2026-06-26.md:- Only 0 or 1 `extended-tracklabel`. Setter replaces; no add method for multiples.
+./60 - Daily Notes/2026-06-26.md:- `extended-tracklabel` maxOccurs=1 (default) with minOccurs=0 → nullable single pointer, not a list.
+./60 - Daily Notes/2026-06-26.md:registry["extended-tracklabel"] = [](QObject* p) { return new ExtendedTrackLabelModel(p); };
+./60 - Daily Notes/2026-06-26.md:- Test that `TrackLabelConfigModel` refuses a second `extended-tracklabel`.
+./60 - Daily Notes/2026-07-07/2026-07-07.md:m_extendedTrackLabel = make_new<ExtendedTrackLabelModel>() // then ExtendedTrackLabelModel default constructrs it's children, etc.
+./60 - Daily Notes/2026-07-07/2026-07-07.md:std::unique_ptr< ExtendedTrackLabelModel > m_extendedTracklabel = make_new<ExtendedTrackLabelModel>();
+./10Summer-Project/Track label Editor/Track Label Editor.md:- ~~What are all valid `tracklabel-type` values?~~ → `TrackLabelTypeVariant` enum: `Correlated`, `Uncorrelated`, `FlightPlanTrack`, `Ground` + `Extended` (for `extended-tracklabel`)
+./10Summer-Project/Track label Editor/Track Label Editor.md:    extended-tracklabel? (ExtendedTrackLabelType)
+./10Summer-Project/Track label Editor/tracklabel-config.md:                <tlabel:extended-tracklabel>
+./10Summer-Project/Track label Editor/tracklabel-config.md:                </tlabel:extended-tracklabel>
+./10Summer-Project/Track label Editor/tracklabel-config.md:The `<extended-tracklabel>` element uses `tracklabel-type="Extended"` (optional attribute, defaults to `Extended`).
+./10Summer-Project/Track label Editor/tracklabel-config.md:`<extended-tracklabel>` adds extra fields to the **Correlated** and **FlightPlanTrack** labels. Its lines are merged positionally — line N of the extended label appends its fields to line N of the base label.
+./10Summer-Project/Track label Editor/tracklabel-config.md:- If the base label has fewer lines than the extended label, empty lines are inserted first.
+./10Summer-Project/Track label Editor/tracklabel-config.md:- All fields from the extended label receive `m_extendedField = true` internally.
+./10Summer-Project/Track label Editor/tracklabel-config.md:- `<extended-tracklabel>` has **no effect** on `Uncorrelated` or `Ground` labels.
+./10Summer-Project/Track label Editor/tracklabel-config.md:- Only one `<extended-tracklabel>` block is allowed per configuration.
+./10Summer-Project/Track label Editor/tracklabel-config.md:- `<extended-tracklabel>` lines
+./10Summer-Project/Track label Editor/tracklabel-config.md:| **Extended label only affects Correlated and FlightPlanTrack** | The `extractExtendedTrackLabel` method only searches for those two types. `Uncorrelated` and `Ground` are not extended.                                                    |
+./10Summer-Project/Track label Editor/tracklabel-config.md:| **Only one `<extended-tracklabel>` block**                     | The schema allows 0 or 1. A second block would be ignored or cause a parse error.                                                                                          |
+./10Summer-Project/FlightRecordFLowAndDesignNotes.md:    ├── extended-tracklabel?  (same internal shape, @tracklabel-type = Extended)
+./10Summer-Project/FlightRecordFLowAndDesignNotes.md:- It produces `std::vector<TrackLabel>` where each `TrackLabel` contains lines of [TrackLabelLineConfig](source/libs/asd.track.label/config/TrackLabelLineConfig.h) → [TrackLabelFieldConfig](source/libs/asd.track.label/config/TrackLabelFieldConfig.h) (plus a `displayRole` derived from the field name and an `m_extendedField` flag for fields under `extended-tracklabel`).
+./10Summer-Project/FlightRecordFLowAndDesignNotes.md:- Persist back as XML matching the schema. Preserve the optional sections (`extended-tracklabel`, `column-0-actions`) and the deprecated `path` attribute (the schema marks it required).
+./10Summer-Project/FlightRecordFLowAndDesignNotes.md:  - `extended-tracklabel` accepts only `tracklabel-type="Extended"`.
+./extended.info:./.obsidian/workspace.json:                "query": "extended",
+./extended.info:./60 - Daily Notes/2026-06-26.md:| `TrackLabelListType` | `TrackLabelConfigModel` — root container, owns `tracklabel[]`, `extended-tracklabel?`, `column-0-actions?`. Has attributes: `path`, `radio-callsign-filepath`, `has-external-transfer`, `has-force-act`, `has-flight-rule-change`. |
+./extended.info:./60 - Daily Notes/2026-06-26.md:- **Tag:** `tracklabel` or `extended-tracklabel` (set by subclass)
+./extended.info:./60 - Daily Notes/2026-06-26.md:- `m_extendedTracklabel` — `ExtendedTrackLabelModel*` (minOccurs=0, maxOccurs=1, nullable)
+./extended.info:./60 - Daily Notes/2026-06-26.md:- Only 0 or 1 `extended-tracklabel`. Setter replaces; no add method for multiples.
+./extended.info:./60 - Daily Notes/2026-06-26.md:- `extended-tracklabel` maxOccurs=1 (default) with minOccurs=0 → nullable single pointer, not a list.
+./extended.info:./60 - Daily Notes/2026-06-26.md:registry["extended-tracklabel"] = [](QObject* p) { return new ExtendedTrackLabelModel(p); };
+./extended.info:./60 - Daily Notes/2026-06-26.md:- Test that `TrackLabelConfigModel` refuses a second `extended-tracklabel`.
+./extended.info:./60 - Daily Notes/2026-07-07/2026-07-07.md:m_extendedTrackLabel = make_new<ExtendedTrackLabelModel>() // then ExtendedTrackLabelModel default constructrs it's children, etc.
+./extended.info:./60 - Daily Notes/2026-07-07/2026-07-07.md:std::unique_ptr< ExtendedTrackLabelModel > m_extendedTracklabel = make_new<ExtendedTrackLabelModel>();
+./extended.info:./10Summer-Project/Track label Editor/Track Label Editor.md:- ~~What are all valid `tracklabel-type` values?~~ → `TrackLabelTypeVariant` enum: `Correlated`, `Uncorrelated`, `FlightPlanTrack`, `Ground` + `Extended` (for `extended-tracklabel`)
+./extended.info:./10Summer-Project/Track label Editor/Track Label Editor.md:    extended-tracklabel? (ExtendedTrackLabelType)
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:                <tlabel:extended-tracklabel>
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:                </tlabel:extended-tracklabel>
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:The `<extended-tracklabel>` element uses `tracklabel-type="Extended"` (optional attribute, defaults to `Extended`).
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:`<extended-tracklabel>` adds extra fields to the **Correlated** and **FlightPlanTrack** labels. Its lines are merged positionally — line N of the extended label appends its fields to line N of the base label.
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:- If the base label has fewer lines than the extended label, empty lines are inserted first.
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:- All fields from the extended label receive `m_extendedField = true` internally.
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:- `<extended-tracklabel>` has **no effect** on `Uncorrelated` or `Ground` labels.
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:- Only one `<extended-tracklabel>` block is allowed per configuration.
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:- `<extended-tracklabel>` lines
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:| **Extended label only affects Correlated and FlightPlanTrack** | The `extractExtendedTrackLabel` method only searches for those two types. `Uncorrelated` and `Ground` are not extended.                                                    |
+./extended.info:./10Summer-Project/Track label Editor/tracklabel-config.md:| **Only one `<extended-tracklabel>` block**                     | The schema allows 0 or 1. A second block would be ignored or cause a parse error.                                                                                          |
+./extended.info:./10Summer-Project/FlightRecordFLowAndDesignNotes.md:    ├── extended-tracklabel?  (same internal shape, @tracklabel-type = Extended)
+./extended.info:./10Summer-Project/FlightRecordFLowAndDesignNotes.md:- It produces `std::vector<TrackLabel>` where each `TrackLabel` contains lines of [TrackLabelLineConfig](source/libs/asd.track.label/config/TrackLabelLineConfig.h) → [TrackLabelFieldConfig](source/libs/asd.track.label/config/TrackLabelFieldConfig.h) (plus a `displayRole` derived from the field name and an `m_extendedField` flag for fields under `extended-tracklabel`).
+./extended.info:./10Summer-Project/FlightRecordFLowAndDesignNotes.md:- Persist back as XML matching the schema. Preserve the optional sections (`extended-tracklabel`, `column-0-actions`) and the deprecated `path` attribute (the schema marks it required).
+./extended.info:./10Summer-Project/FlightRecordFLowAndDesignNotes.md:  - `extended-tracklabel` accepts only `tracklabel-type="Extended"`.

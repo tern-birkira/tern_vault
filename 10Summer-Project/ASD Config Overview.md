@@ -49,7 +49,7 @@ Key concepts:
   - `id` — unique identifier
   - `class-mapping-reference` — maps to a C++ class in Polaris
 - **namespace prefix** (`tlabel:`, `tlist:`, etc.) — scopes the XML to a specific schema
-- **`${property.name}`** — placeholder resolved from `.properties` files at runtime
+- **`${property.nam}`** — placeholder resolved from `.properties` files at runtime
 
 ---
 

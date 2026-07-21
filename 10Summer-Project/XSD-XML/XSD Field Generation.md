@@ -71,15 +71,15 @@ Both schemas live in `polaris-asd/schemas/`:
 
 ## XSD Type → Qt Widget Mapping (Resolved)
 
-| XSD Type | Qt Widget | Notes |
-|----------|-----------|-------|
-| `xs:boolean` | `QCheckBox` | `toggleable`, `only-show-on-focus`, `blinking`, etc. |
-| `xs:string` | `QLineEdit` | Free text |
-| `xs:int` | `QSpinBox` | `left-margin`, `fixed-width-in-characters`, `column`, `row`, etc. |
-| `xs:float` | `QDoubleSpinBox` | e.g. `list-panel-background-opacity` |
-| `xs:restriction` with `xs:enumeration` | `QComboBox` | `field-name`, `tracklabel-type`, `font-adjustment`, `mouse`, etc. |
-| `st:StyleSheetColorTypes` | `QComboBox` or color picker | Named color palette (from `polaris-shared-types.xsd`) |
-| `st:ColorType` | Color picker / hex input | Hex color string (e.g. `#8CBAF0`) |
+| XSD Type                               | Qt Widget                   | Notes                                                             |
+| -------------------------------------- | --------------------------- | ----------------------------------------------------------------- |
+| `xs:boolean`                           | `QCheckBox`                 | `toggleable`, `only-show-on-focus`, `blinking`, etc.              |
+| `xs:string`                            | `QLineEdit`                 | Free text                                                         |
+| `xs:int`                               | `QSpinBox`                  | `left-margin`, `fixed-width-in-characters`, `column`, `row`, etc. |
+| `xs:float`                             | `QDoubleSpinBox`            | e.g. `list-panel-background-opacity`                              |
+| `xs:restriction` with `xs:enumeration` | `QComboBox`                 | `field-name`, `tracklabel-type`, `font-adjustment`, `mouse`, etc. |
+| `st:StyleSheetColorTypes`              | `QComboBox` or color picker | Named color palette (from `polaris-shared-types.xsd`)             |
+| `st:ColorType`                         | Color picker / hex input    | Hex color string (e.g. `#8CBAF0`)                                 |
 
 ### Special case: `FontSizeDelta`
 Restricted string enum — NOT an integer. Valid values: `-4`, `-2`, `-1`, `0`, `+1`, `+2`, `+4`.
