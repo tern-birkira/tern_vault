@@ -1,0 +1,4 @@
+./.obsidian/workspace.json:                "query": "column0",
+./.obsidian/workspace.json:    "column0.txt",
+./60 - Daily Notes/2026-06-26.md:- `m_column0Actions` — `Column0ActionsModel*` (minOccurs=0, maxOccurs=1, nullable)
+./60 - Daily Notes/track-label-model-tree.md:- `m_column0Actions` — `Column0ActionsModel*` (minOccurs=0, maxOccurs=1, nullable)
