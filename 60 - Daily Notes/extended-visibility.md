@@ -1,4 +1,5 @@
   
+
 # Extended track label rules
 
   
@@ -198,3 +199,97 @@ extended-label toggle/section for Correlated and FlightPlanTrack (mirroring
 `canExtend()`), and let every variant's existing visibility-state header work
 
 as-is.
+
+  
+
+## Line-count discrepancy: resolved once at config-load, not at runtime
+
+  
+
+`TrackLabelConfig::extractExtendedTrackLabel()` (`TrackLabelConfig.cpp:168-193`)
+
+permanently grows `correlatedLabel->lines` / `flightPlanLabel->lines` to
+
+`max(baseLineCount, extendedLineCount)` by `emplace_back()`-ing empty lines
+
+(`:172-178`) *before* appending the extended fields (tagged
+
+`m_extendedField = true`) onto line `i`. This is a one-time structural merge
+
+baked into the model at load time — there is no runtime reconciliation step,
+
+and the base and extended line lists are never treated as two independently
+
+sized lists that need aligning on the fly. The editor should mirror this:
+
+when editing/saving a Correlated or FlightPlanTrack layout with an extended
+
+block, the merged line count is `max(base, extended)`, with empty lines
+
+padded on the shorter side.
+
+  
+
+## Empty lines have no dedicated visibility code — they just collapse
+
+  
+
+`TrackLabelContent.qml`'s line delegate sizes itself with
+
+`Layout.preferredWidth/Height: childrenRect.width/height` (`:53-54`).
+
+`TrackLabelLineProxyModel::filterAcceptsRow()` only ever filters individual
+
+**field** rows within one line's field-list model (the collapsed/expanded
+
+extended toggle), never whole label-line rows. If every field in a line ends
+
+up invisible (via the layered `evaluateVisibility` rules), that line's
+
+`childrenRect` naturally shrinks to ~0 — fully stripped, not just
+
+hidden-but-reserving-space. This is emergent from Qt Quick's
+
+positioner-skips-invisible-children behaviour, the same mechanism as the
+
+`FieldItem.visible` binding fixed earlier — no dedicated "hide empty line"
+
+logic exists anywhere in `polaris-asd`.
+
+  
+
+**Editor implication:** the editor's own `TrackLabelView.qml` deliberately
+
+keeps every line visible regardless of field visibility, because
+
+`rowContentId`'s `Row` always includes the `+` add-field button alongside the
+
+field row — a line can never fully collapse in the editor, since the `+`
+
+button must stay reachable to add fields to an otherwise-empty line. This is
+
+the right call for an editor (you need to be able to add to a line the
+
+runtime viewer would hide) and requires no change.
+
+  
+
+## Empty lines (no fields at all) are schema-valid, for both base and extended
+
+  
+
+`TrackLabelLineType` (`tracklabel.xsd:98-118`) is `xs:choice minOccurs="0"
+
+maxOccurs="unbounded"` — a `tracklabel-line` with **zero** field children is
+
+valid. The real app itself creates such lines: `extractExtendedTrackLabel()`
+
+calls bare `lines.emplace_back()` (`:174`, `:178`) to pad the shorter list,
+
+producing genuinely fieldless lines in both the base and extended line
+
+arrays. **The editor may allow adding a new line with no fields, in either
+
+the regular or extended section** — this is not a schema violation and
+
+matches existing real-app behaviour, not a new/invented capability.

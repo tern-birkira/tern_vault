@@ -1,5 +1,9 @@
   
 
+# Track label field visibility rules
+
+  
+
 Fact-check and corrected reference for how a `field` (`TrackLabelFieldType`) decides
 
 whether it is shown, based on `schemas/tracklabel.xsd` and the runtime behaviour in
@@ -128,13 +132,15 @@ actually in holding.
 
   
 
-`asd-editor` has no "established in holding" runtime concept at all (no toggle, no
+`asd-editor` had no "established in holding" runtime concept at first (no toggle, no
 
-field) — only `activeVisibility` and `activeControlState` exist. So in the editor this
+field) — only `activeVisibility` and `activeControlType` existed. This gap is now closed:
 
-attribute can only be honoured as the bypass switch above; the "is this flight actually
+`TrackLabelRuntimeDataController::activeVisibleInHolding` (toggled via the "In Holding"
 
-in holding" half of the runtime condition has no editor equivalent.
+button beneath the control-state header) supplies the runtime half of this condition —
+
+see Layer 5 below for where it applies.
 
   
 
@@ -164,15 +170,23 @@ layouts, so no per-flight flag is needed).
 
   
 
-### Layer 5 — `when-unselected-for-control-states`
+### Layer 5 — `when-unselected-for-control-states`, gated by holding
 
   
 
-Only reached for a correlated layout, unfocused, not `visible-in-holding`-overridden field:
+Runtime: `return !trackModel.isEstablishedInHolding && controlStateComparisonHelperId.matchFound;`
 
-shown iff the list is empty ("if not set the field is shown by default" —
+Only reached for a correlated layout, unfocused, not `visible-in-holding`-overridden field.
 
-`tracklabel.xsd:214`) or contains the active control state.
+Two conditions both have to hold:
+
+- the simulated flight must **not** be established in holding
+
+(`!activeVisibleInHolding` — the editor's own runtime toggle, see Layer 2), and
+
+- the control-state list must be empty ("if not set the field is shown by default" —
+
+`tracklabel.xsd:214`) or contain the active control state.
 
   
 
@@ -194,23 +208,31 @@ conditionFulfilled(show-if/hide-if)
 
 && ( isUncorrelatedLayout
 
-|| controlStates.isEmpty()
+|| ( !activeVisibleInHolding
 
-|| controlStates.contains(activeControlState) ) ) ) )
+&& ( controlStates.isEmpty()
+
+|| controlStates.contains(activeControlType) ) ) ) ) ) )
 
 ```
 
   
 
-## Known editor-only gaps (ponytail: documented ceilings)
+Implemented in `FieldInterface::evaluateVisibility()` (`interface/FieldInterface.cpp`),
+
+called per-field from `FieldListModel::evalVisibility()`, driven by
+
+`TrackLabelDataController::reevaluateActiveLayoutVisibility()` whenever
+
+`TrackLabelRuntimeDataController::changed` fires (wired in
+
+`TrackLabelEditorInstantiator`'s constructor).
 
   
 
-- No "established in holding" toggle exists — `visible-in-holding` is honoured only as
+## Known editor-only gaps (documented ceilings)
 
-the always-show-while-unfocused bypass, never as "hide unless holding". Add a holding
-
-toggle next to `activeControlState` if that distinction is ever needed.
+  
 
 - `show-if`/`hide-if` cross-field lookup uses the *other* field's `dummyData` (the only
 
